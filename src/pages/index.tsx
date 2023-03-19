@@ -4,6 +4,7 @@ import Head from "next/head";
 import styles from "@/styles/Bingo.module.css";
 import config from "../../config";
 import createShuffledArray from "@/utils/create-shuffled-array";
+import Layout from "@/layouts/Layout";
 
 interface Props {
   min: number;
@@ -110,53 +111,41 @@ const Bingo = ({ min, max, defaultTimer }: Props) => {
   }, [isDrawing]);
 
   return (
-    <>
-      <Head>
-        <title>Bingo Draw App</title>
-        <meta
-          name="description"
-          content="Une application de tirage au bingo en temps réel pour animer vos soirées entre amis ou en famille. Générez des numéros de bingo aléatoires et gardez une trace de tous les numéros tirés."
-        />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-      <main>
-        <div className={styles.bingo}>
-          <h1>Tirage au bingo</h1>
-          <button onClick={startDrawing} disabled={isDrawing}>
-            Start
-          </button>
-          <button onClick={pauseDrawing} disabled={!isDrawing}>
-            Pause
-          </button>
-          <button onClick={restartDrawing}>Reset</button>
-          <p>Temps restant avant le prochain tirage : {intervalTime - timer} secondes</p>
-          <div>
-            <label htmlFor="interval-slider">
-              Intervalle de tirage : {intervalTime}{" "}
-              {intervalTime > 1 ? "secondes" : "seconde"}
-            </label>
-            <input
-              type="range"
-              id="interval-slider"
-              min="1"
-              max="10"
-              value={intervalTime}
-              onChange={handleIntervalChange}
-            />
-          </div>
-          {currentNumber !== null ? (
-            <h2>Numéro tiré : {currentNumber}</h2>
-          ) : (
-            <h2>Tous les numéros ont été tirés.</h2>
-          )}
-          <h3>Tableau des numéros :</h3>
-          <table className={styles.numberTable}>
-            <tbody>{createTable()}</tbody>
-          </table>
+    <Layout>
+      <main className={styles.bingo}>
+        <h1>Bingo Draw</h1>
+        <button onClick={startDrawing} disabled={isDrawing}>
+          Start
+        </button>
+        <button onClick={pauseDrawing} disabled={!isDrawing}>
+          Pause
+        </button>
+        <button onClick={restartDrawing}>Reset</button>
+        <p>
+          Time remaining until the next draw : {intervalTime - timer} seconds
+        </p>
+        <div>
+          <label htmlFor="interval-slider">
+            Drawing interval : {intervalTime}{" "}
+            {intervalTime > 1 ? "seconds" : "second"}
+          </label>
+          <input
+            type="range"
+            id="interval-slider"
+            min="1"
+            max="10"
+            value={intervalTime}
+            onChange={handleIntervalChange}
+          />
         </div>
+        {currentNumber !== null && <h2>Number drawn : {currentNumber}</h2>}
+        {remainingNumbers.length === 0 && <h2>All numbers have been drawn.</h2>}
+        <h3>Number Table :</h3>
+        <table className={styles.numberTable}>
+          <tbody>{createTable()}</tbody>
+        </table>
       </main>
-    </>
+    </Layout>
   );
 };
 

@@ -6,6 +6,7 @@
   background-color: #f7f7f7;
   border: 1px solid #ddd;
   border-radius: 4px;
+  flex: 1;
 }
 
 .bingo h1 {
