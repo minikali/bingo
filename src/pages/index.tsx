@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import cn from "classnames";
-import Head from "next/head";
 import styles from "@/styles/Bingo.module.css";
 import config from "../../config";
 import createShuffledArray from "@/utils/create-shuffled-array";
