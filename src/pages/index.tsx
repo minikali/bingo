@@ -1,113 +1,60 @@
-import { useCallback, useEffect, useRef, useState } from "react";
-import cn from "classnames";
+import { useEffect, useRef } from "react";
 import styles from "@/styles/Bingo.module.css";
 import config from "../../config";
-import createShuffledArray from "@/utils/create-shuffled-array";
 import Layout from "@/layouts/Layout";
+import { useSettingsContext } from "@/contexts/settings-context";
+import TableResults from "@/components/TableResults";
+import { useGameContext } from "@/contexts/game-context";
 
-interface Props {
-  min: number;
-  max: number;
-  defaultTimer: number;
-}
+const Bingo = () => {
+  const { range, intervalTime, setIntervalTime } = useSettingsContext();
+  const {
+    timer,
+    isDrawing,
+    currentNumber,
+    remainingNumbers,
+    drawnNumbers,
+    drawNumber,
+    startDrawing,
+    pauseDrawing,
+    restartDrawing,
+    incrementTimer,
+  } = useGameContext();
 
-const Bingo = ({ min, max, defaultTimer }: Props) => {
-  const [drawnNumbers, setDrawnNumbers] = useState<number[]>([]);
-  const [currentNumber, setCurrentNumber] = useState<number | null>(null);
-  const [remainingNumbers, setRemainingNumbers] = useState(
-    createShuffledArray(max)
-  );
-  const [isDrawing, setIsDrawing] = useState(false);
-  const [timer, setTimer] = useState(0);
-  const [intervalTime, setIntervalTime] = useState(defaultTimer);
   const intervalRef = useRef<NodeJS.Timer | null>(null);
-
-  const drawNumber = useCallback(() => {
-    if (remainingNumbers.length > 0) {
-      const randomNumber = remainingNumbers.pop()!;
-      setCurrentNumber(randomNumber);
-      setDrawnNumbers([...drawnNumbers, randomNumber]);
-      setRemainingNumbers(remainingNumbers);
-      setTimer(0);
-    } else {
-      setCurrentNumber(null);
-      setIsDrawing(false);
-    }
-  }, [drawnNumbers, remainingNumbers]);
-
-  const startDrawing = () => {
-    setIsDrawing(true);
-  };
-
-  const pauseDrawing = () => {
-    setIsDrawing(false);
-    if (intervalRef.current) clearInterval(intervalRef.current);
-  };
-
-  const restartDrawing = () => {
-    setCurrentNumber(null);
-    setDrawnNumbers([]);
-    setRemainingNumbers(createShuffledArray(max));
-    setTimer(0);
-    setIsDrawing(false);
-    if (intervalRef.current) clearInterval(intervalRef.current);
-  };
-
-  const createTable = () => {
-    const rows = Math.ceil((max - min + 1) / 10);
-    const columns = 10;
-
-    const table = [];
-    for (let i = 0; i < rows; i++) {
-      const row = [];
-      for (let j = 1; j <= columns; j++) {
-        const number = i * 10 + j;
-        row.push(
-          <td
-            key={number}
-            className={cn(styles.numberCell, {
-              [styles.drawn]: drawnNumbers.includes(number),
-            })}
-          >
-            {number}
-          </td>
-        );
-      }
-      table.push(<tr key={i}>{row}</tr>);
-    }
-    return table;
-  };
-
-  useEffect(() => {
-    if (!isDrawing) {
-      if (intervalRef.current) clearInterval(intervalRef.current);
-      return;
-    }
-    intervalRef.current = setInterval(() => {
-      drawNumber();
-    }, intervalTime * 1000);
-
-    return () => {
-      if (intervalRef.current) clearInterval(intervalRef.current);
-    };
-  }, [drawnNumbers, isDrawing, intervalTime, drawNumber]);
 
   const handleIntervalChange = (
     event: React.ChangeEvent<HTMLInputElement> | undefined
   ) => {
-    if (!event) return;
-    setIntervalTime(parseInt(event.target.value, 10));
+    const value = event?.target?.value;
+    if (!value) return;
+    setIntervalTime(parseInt(value, 10));
   };
+
+  useEffect(() => {
+    if (!isDrawing) {
+      if (intervalRef.current) clearTimeout(intervalRef.current);
+      return;
+    }
+    intervalRef.current = setTimeout(() => {
+      drawNumber();
+      intervalRef.current = setTimeout(() => {
+        setImmediate(() => {});
+      }, intervalTime * 1000);
+    }, intervalTime * 1000);
+
+    return () => {
+      if (intervalRef.current) clearTimeout(intervalRef.current);
+    };
+  }, [drawnNumbers, isDrawing, intervalTime, drawNumber]);
 
   useEffect(() => {
     if (!isDrawing) return;
 
-    const timerInterval = setInterval(() => {
-      setTimer((prevTimer) => prevTimer + 1);
-    }, 1000);
+    const timerInterval = setInterval(() => incrementTimer(), 1000);
 
     return () => clearInterval(timerInterval);
-  }, [isDrawing]);
+  }, [incrementTimer, isDrawing]);
 
   return (
     <Layout>
@@ -123,6 +70,10 @@ const Bingo = ({ min, max, defaultTimer }: Props) => {
         <p>
           Time remaining until the next draw : {intervalTime - timer} seconds
         </p>
+        {currentNumber !== null && <h2>Number drawn : {currentNumber}</h2>}
+        {remainingNumbers.length === 0 && <h2>All numbers have been drawn.</h2>}
+        <TableResults range={range} drawnNumbers={drawnNumbers} />
+        <h3>Settings</h3>
         <div>
           <label htmlFor="interval-slider">
             Drawing interval : {intervalTime}{" "}
@@ -137,12 +88,6 @@ const Bingo = ({ min, max, defaultTimer }: Props) => {
             onChange={handleIntervalChange}
           />
         </div>
-        {currentNumber !== null && <h2>Number drawn : {currentNumber}</h2>}
-        {remainingNumbers.length === 0 && <h2>All numbers have been drawn.</h2>}
-        <h3>Number Table :</h3>
-        <table className={styles.numberTable}>
-          <tbody>{createTable()}</tbody>
-        </table>
       </main>
     </Layout>
   );
@@ -153,7 +98,6 @@ export async function getStaticProps() {
     props: {
       min: config.range.min,
       max: config.range.max,
-      defaultTimer: config.defaultTimer,
     },
   };
 }
