@@ -1,24 +1,31 @@
-import Link from "next/link";
 import { useState } from "react";
+import Link from "next/link";
 import styles from "@/styles/Header.module.css";
+// import classNames from "classnames";
 
 const Header = () => {
-  const [menuOpen, setMenuOpen] = useState(false);
+  // const [isOpen, setIsOpen] = useState(false);
 
-  const handleMenuToggle = () => {
-    setMenuOpen(!menuOpen);
-  };
+  // const handleMenuToggle = () => {
+  //   setIsOpen(!isOpen);
+  // };
 
   return (
     <header className={styles.header}>
       <div className={styles.logo}>
         <Link href="/">Bingo Draw</Link>
       </div>
-      <nav
-        className={
-          menuOpen ? `${styles.navigation} ${styles.open}` : styles.navigation
-        }
+
+      {/* <div
+        className={classNames(styles.burger, { [styles.open]: isOpen })}
+        onClick={handleMenuToggle}
       >
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+
+      <nav className={classNames(styles.navigation, { [styles.open]: isOpen })}>
         <ul>
           <li>
             <Link href="/">Home</Link>
@@ -30,18 +37,7 @@ const Header = () => {
             <Link href="/contact">Contact</Link>
           </li>
         </ul>
-      </nav>
-      <div className={styles.burger} onClick={handleMenuToggle}>
-        <div
-          className={menuOpen ? `${styles.line} ${styles.line1}` : styles.line}
-        ></div>
-        <div
-          className={menuOpen ? `${styles.line} ${styles.line2}` : styles.line}
-        ></div>
-        <div
-          className={menuOpen ? `${styles.line} ${styles.line3}` : styles.line}
-        ></div>
-      </div>
+      </nav> */}
     </header>
   );
 };
