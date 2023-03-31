@@ -1,0 +1,44 @@
+.ball {
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background-color: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: radial-gradient(circle at center, #333 85%, #fff 95%, #333);
+  position: relative;
+}
+
+.white {
+  width: 75%;
+  height: 75%;
+  border-radius: 50%;
+  background-color: #fff;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.white::before {
+  content: "";
+  width: 85%;
+  height: 85%;
+  border-radius: 50%;
+  background-color: white;
+  border: 10px solid black;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.number {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-weight: bold;
+  font-size: 8rem;
+}

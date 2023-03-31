@@ -27,7 +27,7 @@ export const useSettingsContext = () => {
 };
 
 const SettingsContextProvider = ({ children }: Props) => {
-  const [intervalTime, setIntervalTime] = useState(4);
+  const [intervalTime, setIntervalTime] = useState(2000);
   const [range] = useState({ min: 1, max: 90 });
 
   return (
