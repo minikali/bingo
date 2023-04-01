@@ -21,7 +21,8 @@ const Board = () => {
     drawNumber,
     restartDrawing,
   } = useBingoState(range.max);
-
+  console.log("drawnNumbers", drawnNumbers);
+  console.log("remainingNumbers", remainingNumbers);
   const { timer, isRunning, startTimer, pauseTimer, resetTimer } = useTimer({
     defaultTimer: intervalTime,
     callback: drawNumber,
@@ -67,7 +68,11 @@ const Board = () => {
             <RestartIcon />
           </Button>
         </div>
-        <ProgressBar className={styles.progressBar} timer={timer} intervalTime={intervalTime} />
+        <ProgressBar
+          className={styles.progressBar}
+          timer={timer}
+          intervalTime={intervalTime}
+        />
         {remainingNumbers.length === 0 && <h2>All numbers have been drawn.</h2>}
         <TableResults range={range} drawnNumbers={drawnNumbers} />
         <h3>Settings</h3>
