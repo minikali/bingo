@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useState } from "react";
 import styles from "@/styles/Board.module.css";
 import Layout from "@/layouts/Layout";
 import { useSettingsContext } from "@/contexts/settings-context";
@@ -11,6 +11,7 @@ import { RestartIcon } from "./icons/Restart-icon";
 import useTimer from "@/hooks/useTimer";
 import useBingoState from "@/hooks/useBingoState";
 import ProgressBar from "./ProgressBar";
+import Popup from "./Popup";
 
 const Board = () => {
   const { range, intervalTime, setIntervalTime } = useSettingsContext();
@@ -21,12 +22,12 @@ const Board = () => {
     drawNumber,
     restartDrawing,
   } = useBingoState(range.max);
-  console.log("drawnNumbers", drawnNumbers);
-  console.log("remainingNumbers", remainingNumbers);
+
   const { timer, isRunning, startTimer, pauseTimer, resetTimer } = useTimer({
     defaultTimer: intervalTime,
     callback: drawNumber,
   });
+  const [showPopup, setShowPopup] = useState(false);
 
   const handleIntervalChange = (
     event: React.ChangeEvent<HTMLInputElement> | undefined
@@ -47,8 +48,22 @@ const Board = () => {
     restartDrawing();
   }, [resetTimer, restartDrawing]);
 
+  const handleClosePopup = useCallback(() => {
+    setShowPopup(false);
+  }, []);
+
+  useEffect(() => {
+    if (remainingNumbers.length === 0) {
+      setShowPopup(true);
+      pauseTimer();
+    }
+  }, [pauseTimer, remainingNumbers]);
+
   return (
     <Layout>
+      <Popup show={showPopup} onClose={handleClosePopup}>
+        <h2>All numbers have been drawn.</h2>
+      </Popup>
       <main className={styles.bingo}>
         <div className={styles.ballContainer}>
           <Ball>{currentNumber}</Ball>
@@ -73,7 +88,6 @@ const Board = () => {
           timer={timer}
           intervalTime={intervalTime}
         />
-        {remainingNumbers.length === 0 && <h2>All numbers have been drawn.</h2>}
         <TableResults range={range} drawnNumbers={drawnNumbers} />
         <h3>Settings</h3>
         <div>
