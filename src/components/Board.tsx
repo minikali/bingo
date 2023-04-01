@@ -3,7 +3,7 @@ import styles from "@/styles/Board.module.css";
 import Layout from "@/layouts/Layout";
 import { useSettingsContext } from "@/contexts/settings-context";
 import TableResults from "@/components/TableResults";
-import Ball from "@/components/Ball";
+import Ball, { getBallColor } from "@/components/Ball";
 import Button from "./Button";
 import { PlayIcon } from "./icons/Play-icon";
 import { PauseIcon } from "./icons/Pause-icon";
@@ -66,7 +66,15 @@ const Board = () => {
       </Popup>
       <main className={styles.bingo}>
         <div className={styles.ballContainer}>
-          <Ball>{currentNumber}</Ball>
+          <Ball
+            color={
+              currentNumber && drawnNumbers.includes(currentNumber)
+                ? getBallColor(currentNumber)
+                : "dark"
+            }
+          >
+            {currentNumber}
+          </Ball>
         </div>
         <div className={styles.command}>
           <Button
@@ -92,13 +100,14 @@ const Board = () => {
         <h3>Settings</h3>
         <div>
           <label htmlFor="interval-slider">
-            Drawing interval : {timer} {intervalTime > 1 ? "seconds" : "second"}
+            Drawing interval : {intervalTime}
           </label>
           <input
             type="range"
             id="interval-slider"
-            min="1"
-            max="10"
+            min={500}
+            max={10000}
+            step={500}
             value={intervalTime}
             onChange={handleIntervalChange}
           />

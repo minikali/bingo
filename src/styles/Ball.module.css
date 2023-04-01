@@ -1,12 +1,9 @@
 .ball {
-  width: 300px;
-  height: 300px;
   border-radius: 50%;
-  background-color: black;
   display: flex;
   justify-content: center;
   align-items: center;
-  background: radial-gradient(circle at center, #333 85%, #fff 95%, #333);
+  background: #333;
   position: relative;
 }
 
@@ -27,7 +24,7 @@
   height: 85%;
   border-radius: 50%;
   background-color: white;
-  border: 10px solid black;
+  border: 10px solid #333;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -41,4 +38,78 @@
   transform: translate(-50%, -50%);
   font-weight: bold;
   font-size: 8rem;
+}
+
+.ball.lg {
+  width: 300px;
+  height: 300px;
+}
+
+.ball.xs {
+  width: 40px;
+  height: 40px;
+}
+
+.ball.xs .white::before {
+  border-width: 1px;
+}
+
+.ball.xs .number {
+  font-size: 1rem;
+}
+
+.ball.dark {
+  background: #333;
+}
+
+.ball.dark .white::before {
+  border-color: #333;
+}
+
+.ball.green {
+  background: #8bc34a;
+}
+
+.ball.green .white::before {
+  border-color: #8bc34a;
+}
+
+.ball.blue {
+  background: #3f51b5;
+}
+
+.ball.blue .white::before {
+  border-color: #3f51b5;
+}
+
+.ball.yellow {
+  background: #ffc107;
+}
+
+.ball.yellow .white::before {
+  border-color: #ffc107;
+}
+
+.ball.red {
+  background: #f44336;
+}
+
+.ball.red .white::before {
+  border-color: #f44336;
+}
+
+.ball.purple {
+  background: #9c27b0;
+}
+
+.ball.purple .white::before {
+  border-color: #9c27b0;
+}
+
+.ball.gray {
+  background: #7c7c7c;
+}
+
+.ball.gray .white::before {
+  border-color: #7c7c7c;
 }

@@ -1,6 +1,6 @@
 import React from "react";
-import cx from "classnames";
 import styles from "@/styles/TableResults.module.css";
+import Ball, { getBallColor } from "./Ball";
 
 interface Props {
   range: {
@@ -11,11 +11,6 @@ interface Props {
 }
 
 const TableResults = ({ range: { min, max }, drawnNumbers }: Props) => {
-  const getClassName = (number: number): string =>
-    cx(styles.numberCell, {
-      [styles.drawn]: drawnNumbers.includes(number),
-    });
-
   const createTable = () => {
     const rows = Math.ceil((max - min + 1) / 10);
     const columns = 10;
@@ -25,9 +20,17 @@ const TableResults = ({ range: { min, max }, drawnNumbers }: Props) => {
       const row = [];
       for (let j = 1; j <= columns; j++) {
         const number = i * 10 + j;
+
         row.push(
-          <td key={number} className={getClassName(number)}>
-            {number}
+          <td key={number} className={styles.cell}>
+            <Ball
+              size="xs"
+              color={
+                drawnNumbers.includes(number) ? getBallColor(number) : "gray"
+              }
+            >
+              {number}
+            </Ball>
           </td>
         );
       }

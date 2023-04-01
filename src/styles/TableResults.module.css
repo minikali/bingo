@@ -3,12 +3,10 @@
   border-collapse: collapse;
 }
 
-.numberCell {
+.cell {
   width: 10%;
-  padding: 0.5rem;
   text-align: center;
-  border: 1px solid #ddd;
-  background-color: #ffffff;
+  padding: 0.15rem;
 }
 
 .drawn {
