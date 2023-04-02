@@ -12,6 +12,8 @@ import useTimer from "@/hooks/useTimer";
 import useBingoState from "@/hooks/useBingoState";
 import ProgressBar from "./ProgressBar";
 import Popup from "./Popup";
+import { GearIcon } from "./icons/Gear-icon";
+import Slider from "./Slider";
 
 const Board = () => {
   const { range, intervalTime, setIntervalTime } = useSettingsContext();
@@ -28,6 +30,7 @@ const Board = () => {
     callback: drawNumber,
   });
   const [showPopup, setShowPopup] = useState(false);
+  const [showSettingsPopup, setShowSettingsPopup] = useState(false);
 
   const handleIntervalChange = (
     event: React.ChangeEvent<HTMLInputElement> | undefined
@@ -52,6 +55,10 @@ const Board = () => {
     setShowPopup(false);
   }, []);
 
+  const toggleSettingsPopup = useCallback(() => {
+    setShowSettingsPopup((prev) => !prev);
+  }, []);
+
   useEffect(() => {
     if (remainingNumbers.length === 0) {
       setShowPopup(true);
@@ -59,10 +66,20 @@ const Board = () => {
     }
   }, [pauseTimer, remainingNumbers]);
 
+  useEffect(() => {
+    resetTimer();
+  }, [intervalTime, resetTimer]);
+
   return (
     <Layout>
       <Popup show={showPopup} onClose={handleClosePopup}>
         <h2>All numbers have been drawn.</h2>
+      </Popup>
+      <Popup show={showSettingsPopup} onClose={toggleSettingsPopup}>
+        <h3>Settings</h3>
+        <div className={styles.slider}>
+          <Slider value={intervalTime} onChange={setIntervalTime} />
+        </div>
       </Popup>
       <main className={styles.bingo}>
         <div className={styles.ballContainer}>
@@ -90,6 +107,13 @@ const Board = () => {
           >
             <RestartIcon />
           </Button>
+          <Button
+            color="yellow"
+            onClick={toggleSettingsPopup}
+            disabled={isRunning}
+          >
+            <GearIcon />
+          </Button>
         </div>
         <ProgressBar
           className={styles.progressBar}
@@ -97,21 +121,6 @@ const Board = () => {
           intervalTime={intervalTime}
         />
         <TableResults range={range} drawnNumbers={drawnNumbers} />
-        <h3>Settings</h3>
-        <div>
-          <label htmlFor="interval-slider">
-            Drawing interval : {intervalTime}
-          </label>
-          <input
-            type="range"
-            id="interval-slider"
-            min={500}
-            max={10000}
-            step={500}
-            value={intervalTime}
-            onChange={handleIntervalChange}
-          />
-        </div>
       </main>
     </Layout>
   );

@@ -39,3 +39,7 @@
 .progressBar {
   margin: 1rem 0.5rem;
 }
+
+.slider {
+  width: 300px;
+}
