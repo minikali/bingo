@@ -14,6 +14,7 @@ import ProgressBar from "./ProgressBar";
 import Popup from "./Popup";
 import { GearIcon } from "./icons/Gear-icon";
 import Slider from "./Slider";
+import Card from "./Card";
 
 const Board = () => {
   const { range, intervalTime, setIntervalTime } = useSettingsContext();
@@ -82,45 +83,47 @@ const Board = () => {
         </div>
       </Popup>
       <main className={styles.bingo}>
-        <div className={styles.ballContainer}>
-          <Ball
-            color={
-              currentNumber && drawnNumbers.includes(currentNumber)
-                ? getBallColor(currentNumber)
-                : "dark"
-            }
-          >
-            {currentNumber}
-          </Ball>
-        </div>
-        <div className={styles.command}>
-          <Button
-            color={!isRunning ? "blue" : "yellow"}
-            onClick={handlePlayPauseButton}
-          >
-            {!isRunning ? <PlayIcon /> : <PauseIcon />}
-          </Button>
-          <Button
-            color="red"
-            onClick={handleRestartButton}
-            disabled={isRunning}
-          >
-            <RestartIcon />
-          </Button>
-          <Button
-            color="yellow"
-            onClick={toggleSettingsPopup}
-            disabled={isRunning}
-          >
-            <GearIcon />
-          </Button>
-        </div>
-        <ProgressBar
-          className={styles.progressBar}
-          timer={timer}
-          intervalTime={intervalTime}
-        />
-        <TableResults range={range} drawnNumbers={drawnNumbers} />
+        <Card>
+          <div className={styles.ballContainer}>
+            <Ball
+              color={
+                currentNumber && drawnNumbers.includes(currentNumber)
+                  ? getBallColor(currentNumber)
+                  : "dark"
+              }
+            >
+              {currentNumber}
+            </Ball>
+          </div>
+          <div className={styles.command}>
+            <Button
+              color={!isRunning ? "blue" : "yellow"}
+              onClick={handlePlayPauseButton}
+            >
+              {!isRunning ? <PlayIcon /> : <PauseIcon />}
+            </Button>
+            <Button
+              color="red"
+              onClick={handleRestartButton}
+              disabled={isRunning}
+            >
+              <RestartIcon />
+            </Button>
+            <Button
+              color="yellow"
+              onClick={toggleSettingsPopup}
+              disabled={isRunning}
+            >
+              <GearIcon />
+            </Button>
+          </div>
+          <ProgressBar
+            className={styles.progressBar}
+            timer={timer}
+            intervalTime={intervalTime}
+          />
+          <TableResults range={range} drawnNumbers={drawnNumbers} />
+        </Card>
       </main>
     </Layout>
   );

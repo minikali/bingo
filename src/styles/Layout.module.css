@@ -1,6 +1,21 @@
 .layout {
-  display: flex;
-  flex-direction: column;
-  min-height: 100%;
-  margin-top: 60px;
+  min-height: 100vh;
+  display: grid;
+  grid-template-rows: 60px 1fr min-content;
+  grid-template-areas:
+    "header"
+    "content"
+    "footer";
+}
+
+.header {
+  grid-area: header;
+}
+
+.content {
+  grid-area: content;
+}
+
+.footer {
+  grid-area: footer;
 }

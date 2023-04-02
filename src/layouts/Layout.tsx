@@ -23,9 +23,9 @@ const Layout = ({ children, title }: Props) => {
         {/* <link rel="icon" href="/favicon.ico" /> */}
       </Head>
       <div className={styles.layout}>
-        <Header />
-        {children}
-        <Footer />
+        <Header className={styles.header} />
+        <div className={styles.content}>{children}</div>
+        <Footer className={styles.footer} />
       </div>
     </>
   );

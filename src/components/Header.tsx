@@ -1,9 +1,11 @@
 import { useState } from "react";
 import Link from "next/link";
 import styles from "@/styles/Header.module.css";
-// import classNames from "classnames";
+import cx from "classnames";
 
-const Header = () => {
+interface HeaderProps extends React.HTMLAttributes<HTMLElement> {}
+
+const Header = ({ className, ...props }: HeaderProps) => {
   // const [isOpen, setIsOpen] = useState(false);
 
   // const handleMenuToggle = () => {
@@ -11,7 +13,7 @@ const Header = () => {
   // };
 
   return (
-    <header className={styles.header}>
+    <header className={cx(styles.header, className)}>
       <div className={styles.logo}>
         <Link href="/">Bingo Draw</Link>
       </div>

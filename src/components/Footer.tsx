@@ -1,10 +1,13 @@
 import React from "react";
 import styles from "@/styles/Footer.module.css";
 import Link from "next/link";
+import cx from "classnames";
 
-const Footer = () => {
+interface FooterProps extends React.HTMLAttributes<HTMLElement> {}
+
+const Footer = ({ className, ...props }: FooterProps) => {
   return (
-    <footer className={styles.footer}>
+    <footer className={cx(styles.footer, className)} {...props}>
       <div className={styles.footerContent}>
         <div className={styles.footerLinks}>
           <Link href="/terms-of-use">Terms of Use</Link>
